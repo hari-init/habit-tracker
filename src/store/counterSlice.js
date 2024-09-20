@@ -1,8 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 export const counterSlice = createSlice({
-  name: "counter",
-  initialState: {
+  name: "counter", // Name of the slice
+  initialState: { // Initial state where the app loads with
     value: 0,
   },
   reducers: {
@@ -18,5 +18,5 @@ export const counterSlice = createSlice({
   },
 })
 
-export const { increment, decrement, incrementByAmount } = counterSlice.actions;
+export const { increment, decrement, incrementByAmount } = counterSlice.actions; // to make the reducers update the value immutably
 export default counterSlice.reducer;
