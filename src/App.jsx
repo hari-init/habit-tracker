@@ -9,6 +9,8 @@ import Footer from './components/footer';
 import { useState } from "react";
 
 
+
+
 function App() {
   
   
@@ -38,9 +40,7 @@ function App() {
           </div>
         </div>
       </div>
-
       
-
       
      <Footer/>
     </>
