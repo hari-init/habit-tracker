@@ -1,19 +1,22 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: ["./src/**/*.{js,jsx,ts,tsx}"],
+  content: ['./src/**/*.{js,jsx,ts,tsx}'],
   theme: {
-    colors: {
-      primary: "#7C93C3",
+    extend: {
+      borderColor: {
+        custom: '#d3d4d7',
+      },
     },
-    extend: {},
   },
-  plugins: [require("daisyui")],
+  plugins: [require('daisyui')],
   daisyui: {
     themes: [
       {
         mytheme: {
-          primary: '#5270CC',
-          'primary-content': '#ffffff'
+          // primary: '#5270CC',
+          primary: '#f94b5ced',
+          'primary-content': '#ffffff',
+          white: '#fff',
         },
       },
     ],

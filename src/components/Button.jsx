@@ -2,9 +2,15 @@
  * Button component receives the property with props
  */
 
+import { Icon } from '@iconify/react';
 
-function Button({ classProp, content, click }) {
-    return <button class={classProp} onClick={click}>{content}</button>
-}
+const Button = ({ classProp, content, click, icon }) => {
+  return (
+    <button className={`${classProp} btn hover:bg-gray-200`} onClick={click}>
+      {icon && <Icon icon={icon} />}
+      {content}
+    </button>
+  );
+};
 
-export default Button
+export default Button;
