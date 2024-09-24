@@ -2,6 +2,7 @@ import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { decrement, increment } from '../../store/counterSlice'
 import Button from '../Button';
+import Sidebar from '../Sidebar';
 
 function Counter() {
     const count = useSelector(state => state.counter.value);
@@ -20,7 +21,6 @@ function Counter() {
                 </div>
             </div>
         </div>
-
 
     )
 }
