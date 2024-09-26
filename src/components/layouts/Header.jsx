@@ -4,10 +4,12 @@ import Button from '../Button';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { fetchImage, googleSignOut } from '../../store/authSlice';
+import { useNavigate } from 'react-router-dom';
 
 const Header = () => {
   const [profileImg, setProfileImg] = useState()
   const dispatch = useDispatch();
+  const navigate  = useNavigate()
   const { user } = useSelector((store) => store.auth);
   useEffect(() => {
     async function fetchData() {
@@ -51,6 +53,7 @@ const Header = () => {
                       />
                     )
                   }
+                 
                 />
               </div>
             </div>
@@ -59,8 +62,9 @@ const Header = () => {
               className='menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow'
             >
               <li>
-                <a className='justify-between'>
+                <a className='justify-between'  onClick={() => navigate('/profile')}>
                   {user ? user.displayName : 'Profile'}
+                 
                 </a>
               </li>
               <li>
