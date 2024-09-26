@@ -2,12 +2,12 @@ import { initializeApp } from 'firebase/app';
 import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyDBZI2XS72Ne-sNxRpd2VWGZDrRwT3BfLY',
-  authDomain: 'habit-tracker-97ac8.firebaseapp.com',
-  projectId: 'habit-tracker-97ac8',
-  storageBucket: 'habit-tracker-97ac8.appspot.com',
-  messagingSenderId: '213155356888',
-  appId: '1:213155356888:web:c0bc0d757572c1fe8537ad',
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_APP_ID,
 };
 
 const app = initializeApp(firebaseConfig);
