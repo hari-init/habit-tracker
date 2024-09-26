@@ -1,11 +1,25 @@
 import Logo from '../../assets/clownfish.png';
 import { Icon } from '@iconify/react';
 import Button from '../Button';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect, useState } from 'react';
+import { fetchImage, googleSignOut } from '../../store/authSlice';
 
 const Header = () => {
+  const [profileImg, setProfileImg] = useState()
+  const dispatch = useDispatch();
+  const { user } = useSelector((store) => store.auth);
+  useEffect(() => {
+    async function fetchData() {
+      const response = await dispatch(fetchImage(user && user.photoURL));
+      setProfileImg(response.payload)
+    }
+    fetchData();
+  },[user])
+
   return (
     <>
-      <div className='navbar bg-base-100 absolute'>
+      <div className='navbar bg-base-100 absolute mb-20'>
         <div className='flex-1'>
           <Button
             classProp='btn-ghost text-xl px-3'
@@ -14,10 +28,7 @@ const Header = () => {
         </div>
         <div className='flex-1 justify-center hover:bg-custom'>
           {' '}
-          <Button
-            classProp='btn-ghost text-xl px-3'
-            content='Habit Tracker'
-          />
+          <Button classProp='btn-ghost text-xl px-3' content='Habit Tracker' />
         </div>
         <div className='flex-1 justify-end px-3'>
           <div className='dropdown dropdown-end'>
@@ -26,15 +37,19 @@ const Header = () => {
               role='button'
               className='btn btn-ghost btn-circle avatar'
             >
-              <div className='w-10 rounded-full'>
+              <div className=' rounded-full'>
                 <Button
-                  classProp='btn-ghost p-0'
+                  classProp='btn-ghost p-0 border-0'
                   content={
-                    <Icon
-                      icon='solar:user-bold-duotone'
-                      width={40}
-                      style={{ padding: '4px' }}
-                    />
+                    user ? (
+                      <img src={profileImg} alt='ht logo' />
+                    ) : (
+                      <Icon
+                        icon='solar:user-bold-duotone'
+                        width={40}
+                        style={{ padding: '4px' }}
+                      />
+                    )
                   }
                 />
               </div>
@@ -45,15 +60,14 @@ const Header = () => {
             >
               <li>
                 <a className='justify-between'>
-                  Profile
-                  <span className='badge'>New</span>
+                  {user ? user.displayName : 'Profile'}
                 </a>
               </li>
               <li>
                 <a>Settings</a>
               </li>
               <li>
-                <a>Logout</a>
+                <a onClick={() => dispatch(googleSignOut())}>Logout</a>
               </li>
             </ul>
           </div>
