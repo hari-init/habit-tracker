@@ -1,4 +1,4 @@
-import TextBox from "./TextBox";
+import TextBox from "./textBox/TextBox";
 import Button from "./Button";
 const Modal = ({ onClose }) => {
     return (
