@@ -7,43 +7,44 @@ import { fetchImage, googleSignOut } from '../../store/authSlice';
 import { useNavigate } from 'react-router-dom';
 
 const Header = () => {
-  const [profileImg, setProfileImg] = useState()
+  const [profileImg, setProfileImg] = useState();
   const dispatch = useDispatch();
-  const navigate  = useNavigate()
+  const navigate = useNavigate();
   const { user } = useSelector((store) => store.auth);
   useEffect(() => {
     async function fetchData() {
       const response = await dispatch(fetchImage(user && user.photoURL));
-      setProfileImg(response.payload)
+      setProfileImg(response.payload);
     }
     fetchData();
-  },[user])
+  }, [user]);
 
   return (
     <>
-      <div className='navbar bg-base-100 absolute mb-20'>
-        <div className='flex-1'>
+      <div className='navbar bg-base-100 absolute mb-20 z-10'>
+        <div className='flex-1 justify-start'>
           <Button
+            click={() => navigate('/')}
             classProp='btn-ghost text-xl px-3'
             content={<img src={Logo} alt='ht logo' width={40} />}
           />
         </div>
         <div className='flex-1 justify-center hover:bg-custom'>
           {' '}
-          <Button classProp='btn-ghost text-xl px-3' content='Habit Tracker' />
+          <Button
+            classProp='btn-ghost text-xl px-3'
+            content='Habit Tracker'
+            click={() => navigate('/')}
+          />
         </div>
-        <div className='flex-1 justify-end px-3'>
+        <div className='flex-1 justify-end'>
           <div className='dropdown dropdown-end'>
-            <div
-              tabIndex={0}
-              role='button'
-              className='btn btn-ghost btn-circle avatar'
-            >
-              <div className=' rounded-full'>
-                <Button
-                  classProp='btn-ghost p-0 border-0'
-                  content={
-                    user ? (
+            <Button
+              classProp='btn-ghost p-0 border-0 btn-circle'
+              content={
+                <div className='w-10 avatar'>
+                  <div className='rounded-full'>
+                    {user ? (
                       <img src={profileImg} alt='ht logo' />
                     ) : (
                       <Icon
@@ -51,20 +52,21 @@ const Header = () => {
                         width={40}
                         style={{ padding: '4px' }}
                       />
-                    )
-                  }
-                 
-                />
-              </div>
-            </div>
+                    )}
+                  </div>
+                </div>
+              }
+            />
             <ul
               tabIndex={0}
               className='menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow'
             >
               <li>
-                <a className='justify-between'  onClick={() => navigate('/profile')}>
+                <a
+                  className='justify-between'
+                  onClick={() => navigate('/profile')}
+                >
                   {user ? user.displayName : 'Profile'}
-                 
                 </a>
               </li>
               <li>

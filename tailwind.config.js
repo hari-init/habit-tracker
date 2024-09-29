@@ -6,6 +6,9 @@ export default {
       borderColor: {
         custom: '#d3d4d7',
       },
+      height: {
+        'content': 'calc(100vh - 5rem)',
+      }
     },
   },
   plugins: [require('daisyui')],

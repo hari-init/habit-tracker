@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import ProfileIcon from '../components/ProfileIcon';
+import ProfileIcon from '../components/profile/ProfileIcon';
 import Button from '../components/Button';
-import ProfileDetails from '../components/ProfileDetails';
+import ProfileDetails from '../components/profile/ProfileDetails';
 import Modal from '../components/Modal';
 
 const Profile = () => {
@@ -15,7 +15,7 @@ const Profile = () => {
     <>
       <div className='relative min-h-screen flex items-center justify-center'>
         <div className='absolute top-16 left-0 w-full h-1/2 bg-gradient-to-r from-pink-400 to-red-400'></div>
-        <div className='card w-full max-w-3xl bg-white shadow-xl rounded-lg p-8 mt-32'>
+        <div className='m-3 card w-full max-w-3xl bg-white shadow-xl rounded-lg p-8 mt-32'>
           <div className='flex'>
             <Button
               classProp='btn btn-ghost btn-lg ml-auto'

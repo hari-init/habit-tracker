@@ -1,5 +1,5 @@
-import TextBoxEmail from '../TextBoxEmail';
-import TextBoxPassword from '../TextBoxPassword';
+import TextBoxEmail from '../textBox/TextBoxEmail';
+import TextBoxPassword from '../textBox/TextBoxPassword';
 import Button from '../Button';
 
 const LoginSignUp = (props) => {
