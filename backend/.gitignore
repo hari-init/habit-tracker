@@ -1,0 +1,7 @@
+habit-tracker.json
+package-lock.json
+yarn.lock
+
+.env
+node_modules
+
