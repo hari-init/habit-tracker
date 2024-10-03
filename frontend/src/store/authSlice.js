@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { auth, provider } from '../firebase/firebase';
 import { signInWithPopup, signOut } from 'firebase/auth';
+import axios from 'axios';
 
 //Thunk Middleware
 
@@ -22,21 +23,69 @@ export const isAuthenticated = createAsyncThunk(
           (error) => reject(error)
         );
       });
-
-      return user;
+      const idToken = await user.getIdToken();
+      return { ...user, idToken };
     } catch (error) {
       return thunk.rejectWithValue(error.message);
     }
   }
 );
 
+//Backend verification
+
+const checkAuthBackEnd = async (idToken) => {
+  await axios
+    .post(
+      'http://localhost:3001/authCheck',
+      {},
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `${idToken}`,
+        },
+      }
+    )
+    .then((response) => {
+      console.log(response.data.message);
+    })
+    .catch((error) => {
+      console.log(error);
+    })
+    .finally(() => {});
+};
+
+//Create user in BE
+const createUser = async (idToken, user) => {
+  await axios
+    .post(
+      'http://localhost:3001/createUser',
+      { user },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `${idToken}`,
+        },
+      }
+    )
+    .then((response) => {
+      console.log(response.data.message);
+    })
+    .catch((error) => {
+      console.log(error);
+    })
+    .finally(() => {});
+};
+
 //For signIn
 export const googleSignIn = createAsyncThunk('googleSignIn', async (thunk) => {
   try {
     const result = await signInWithPopup(auth, provider);
     const user = result.user;
+    const idToken = await user.getIdToken();
+    await checkAuthBackEnd(idToken);
     const { uid, email, displayName, photoURL } = user;
-    return { uid, email, displayName, photoURL };
+    await createUser(idToken, { uid, email, displayName, photoURL });
+    return { uid, email, displayName, photoURL, idToken };
   } catch (error) {
     return thunk.rejectWithValue(error.message);
   }
