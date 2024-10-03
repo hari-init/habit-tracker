@@ -12,10 +12,11 @@ export const isAuthenticated = createAsyncThunk(
     try {
       const user = await new Promise((resolve, reject) => {
         auth.onAuthStateChanged(
-          (user) => {
+          async (user) => {
             if (user) {
               const { uid, email, displayName, photoURL } = user;
-              resolve({ uid, email, displayName, photoURL });
+              const idToken = await user.getIdToken();
+              resolve({ uid, email, displayName, photoURL, idToken });
             } else {
               resolve(null);
             }
@@ -23,8 +24,8 @@ export const isAuthenticated = createAsyncThunk(
           (error) => reject(error)
         );
       });
-      const idToken = await user.getIdToken();
-      return { ...user, idToken };
+
+      return { ...user };
     } catch (error) {
       return thunk.rejectWithValue(error.message);
     }
