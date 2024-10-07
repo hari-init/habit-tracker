@@ -1,12 +1,18 @@
-function CheckboxInput({ checkboxStyle, checked, onChange }) {
-    return (
-        <input 
-            className={`${checkboxStyle} checkbox`}
-            type="checkbox"
-            checked={checked}
-            onChange={onChange}
+function CheckboxInput({ checkboxStyle, labelText, checked, onChange, value }) {
+  return (
+    <div className={`${checkboxStyle}  form-control`}>
+      <label className='label cursor-pointer'>
+        <span className='label-text mr-2'>{labelText}</span>
+        <input
+          type='checkbox'
+          checked={checked}
+          value={value}
+          className='checkbox'
+          onChange={onChange}
         />
-    );
+      </label>
+    </div>
+  );
 }
 
 export default CheckboxInput;
