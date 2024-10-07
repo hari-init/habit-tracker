@@ -1,0 +1,35 @@
+{
+    "userID": {
+        "name": "hari",
+        "email": "hari@gmail.com",
+        "habits": [
+            {
+                "name": "reading books",
+                "isReminder": true,
+                "reminder": {
+                    "time": 12
+                },
+                "repeatMode": {
+                    "daily": {
+                        "monday": true,
+                        "tuesday":true,
+                        "wednesday": true,
+                        "thursday": true,
+                        "friday":true,
+                        "saturday": true,
+                        "sunday": true
+                    },
+                    "weekly": {
+                        "count": 3
+                    }
+                },
+                "streak": 0,
+                "consistency":0,
+                "checkIn": 0
+            }
+        ],
+        "rewards": 0,
+        "overallStreak": 0,
+        "pond": {}
+    }
+}
