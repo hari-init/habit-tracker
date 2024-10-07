@@ -5,8 +5,8 @@ const About = () => {
   return (
     <>
       <div className='flex h-full justify-center items-center'>
-        <div className='card card-side min-h-[650px] max-h-[650px] bg-base-100 shadow-xl h-full md:h-1/4 flex-col md:flex-row w-11/12 md:w-4/5'>
-            {/* <div className='h-1/4'></div>
+        <div className='card card-side min-h-[550px] max-h-[550px] bg-base-100 shadow-xl h-full md:h-1/4 flex-col md:flex-row w-11/12 md:w-11/12'>
+          {/* <div className='h-1/4'></div>
             <div className='h-1/4'></div> */}
           <img
             src={aboutImg}

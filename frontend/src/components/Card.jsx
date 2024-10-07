@@ -1,9 +1,5 @@
-function Card({ cardStyle, content }) {
-    return (
-        <div className={`${cardStyle} card`}>
-            {content}
-        </div>
-    );
+function Card({ cardStyle, content, children }) {
+  return <div className={`${cardStyle} card`}>{children}</div>;
 }
 
 export default Card;

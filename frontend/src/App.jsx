@@ -21,9 +21,17 @@ const App = () => {
               <Route
                 key={index}
                 path={route.path}
-                element={<route.element />}
-                exact={route.exact}
-              />
+                element={route.children ? <route.element /> : <route.element />}
+              >
+                {route.children &&
+                  route.children.map((child, childIndex) => (
+                    <Route
+                      key={childIndex}
+                      path={child.path}
+                      element={<child.element />}
+                    />
+                  ))}
+              </Route>
             ))}
           </Route>
         </Routes>
