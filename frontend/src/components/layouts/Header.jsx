@@ -29,7 +29,7 @@ const Header = () => {
             content={<img src={Logo} alt='ht logo' width={40} />}
           />
         </div>
-        <div className='flex-1 justify-center hover:bg-custom'>
+        <div className='flex-1 justify-center '>
           {' '}
           <Button
             classProp='btn-ghost text-xl px-3'
