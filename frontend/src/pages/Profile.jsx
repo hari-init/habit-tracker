@@ -6,14 +6,13 @@ import ProfileIcon from '../components/profile/ProfileIcon';
 import Button from '../components/Button';
 import ProfileDetails from '../components/profile/ProfileDetails';
 import Modal from '../components/Modal';
-import { fetchUser } from '../store/authSlice';
 import { updateUserDetails } from '../store/authSlice';
 
 const Profile = () => {
   const [isModalVisible, setModalVisible] = useState(false);
   const [profileImg, setProfileImg] = useState(null);
   const dispatch = useDispatch();
-  const { user, profileImgUrl, error } = useSelector((state) => state.auth);
+  const { user } = useSelector((state) => state.auth);
   useEffect(() => {
     async function fetchProfileImage() {
       if (user && user.photoURL && !profileImg) {
