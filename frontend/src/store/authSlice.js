@@ -8,7 +8,7 @@ import axios from 'axios';
 //For Auth Check
 export const isAuthenticated = createAsyncThunk(
   'isAuthenticated',
-  async (thunk) => {
+  async (_, thunkAPI) => { 
     try {
       const user = await new Promise((resolve, reject) => {
         auth.onAuthStateChanged(
@@ -24,16 +24,20 @@ export const isAuthenticated = createAsyncThunk(
           (error) => reject(error)
         );
       });
-
-      return { ...user };
+      if (user && user.email) {      
+        const userData = await thunkAPI.dispatch(fetchUser(user.email)).unwrap(); 
+        const { age, gender } = userData;      
+        return { ...user, age, gender };  
+      }
+      return user;  
     } catch (error) {
-      return thunk.rejectWithValue(error.message);
+      return thunkAPI.rejectWithValue(error.message); 
     }
   }
 );
 
-//Backend verification
 
+//Backend verification
 const checkAuthBackEnd = async (idToken) => {
   await axios
     .post(
@@ -54,6 +58,30 @@ const checkAuthBackEnd = async (idToken) => {
     })
     .finally(() => {});
 };
+
+export const updateUserDetails = createAsyncThunk(
+  'updateUserDetails',
+  async (updatedUser, thunkAPI) => {
+    try {
+      const response = await axios.put(
+        `http://localhost:3001/updateUser/${updatedUser.email}`,
+        { user: updatedUser }, 
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+      console.log('User updated:', response.data.message);
+      const {uid, email, displayName, photoURL, idToken , age, gender } = response.data.user; // Assuming the backend returns updated user data with age and gender
+      return {uid, email, displayName, photoURL, idToken , age, gender };
+     
+    } catch (error) {
+      console.error('Error updating user:', error);
+      return thunkAPI.rejectWithValue(error.message); 
+    }
+  }
+);
 
 //Create user in BE
 const createUser = async (idToken, user) => {
@@ -77,20 +105,43 @@ const createUser = async (idToken, user) => {
     .finally(() => {});
 };
 
-//For signIn
-export const googleSignIn = createAsyncThunk('googleSignIn', async (thunk) => {
-  try {
-    const result = await signInWithPopup(auth, provider);
-    const user = result.user;
-    const idToken = await user.getIdToken();
-    await checkAuthBackEnd(idToken);
-    const { uid, email, displayName, photoURL } = user;
-    await createUser(idToken, { uid, email, displayName, photoURL });
-    return { uid, email, displayName, photoURL, idToken };
-  } catch (error) {
-    return thunk.rejectWithValue(error.message);
+//Fetch user from BE
+export const fetchUser = createAsyncThunk(
+  'fetchUser',
+  async (email, thunkAPI) => {
+    try {
+      const response = await axios.get(`http://localhost:3001/user/${email}`);
+      
+      return response.data.user;
+      
+    } catch (error) {
+      console.error('Error fetching user:', error);
+      return thunkAPI.rejectWithValue(error.message); // Handle the error
+    }
   }
-});
+);
+
+//For signIn
+export const googleSignIn = createAsyncThunk(
+  'googleSignIn',
+  async (_, thunkAPI) => {
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+      const idToken = await user.getIdToken();
+      await checkAuthBackEnd(idToken);
+      const { uid, email, displayName, photoURL } = user;
+      await createUser(idToken, { uid, email, displayName, photoURL });
+      const userData = await thunkAPI.dispatch(fetchUser(email)).unwrap(); 
+      console.log(userData);
+      const { age, gender } = userData;
+
+      return { uid, email, displayName, photoURL, idToken, age, gender };
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
 
 //For SignOut
 
@@ -131,7 +182,15 @@ const authSlice = createSlice({
       })
       .addCase(googleSignOut.fulfilled, (state, action) => {
         state.user = null;
+      })
+      .addCase(updateUserDetails.fulfilled, (state, action) => {
+        state.user = action.payload;
+       
+      })
+      .addCase(updateUserDetails.rejected, (state, action) => {
+        state.error = action.payload; // Handle any error during the update
       });
+    
   },
 });
 
