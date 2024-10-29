@@ -190,7 +190,7 @@ const authSlice = createSlice({
       .addCase(updateUserDetails.rejected, (state, action) => {
         state.error = action.payload; // Handle any error during the update
       });
-   
+    
   },
 });
 

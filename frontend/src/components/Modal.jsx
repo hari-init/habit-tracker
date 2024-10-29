@@ -1,9 +1,13 @@
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import ProfileIcon from './profile/ProfileIcon';
 import TextBox from './textBox/TextBox';
 import Button from './Button';
+import { fetchImage } from '../store/authSlice';
+import { useDispatch } from 'react-redux';
 
 const Modal = ({ onClose, user, updateUser }) => {
+const dispatch = useDispatch();
+const [profileImg, setProfileImg] = useState(null);
   // State to hold the updated values
   const [updatedUser, setUpdatedUser] = useState({
     displayName: user.displayName,
@@ -24,15 +28,30 @@ const Modal = ({ onClose, user, updateUser }) => {
   const handleUpdate = () => {
     updateUser(updatedUser); // Call the updateUser function passed as a prop
   };
+  useEffect(() => {
+    async function fetchProfileImage() {
+      if (user && user.photoURL && !profileImg) {
+        try {
+          const response = await dispatch(fetchImage(user.photoURL));
+          setProfileImg(response.payload);
+        } catch (error) {
+          console.error('Error fetching profile image:', error);
+        }
+      }
+    }
 
+    fetchProfileImage();
+  }, [user, profileImg, dispatch]);
   return (
     <div className='fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center'>
       <div className='modal-box'>
         <ProfileIcon
-          profileImg={user.profileImg}
+          photo={profileImg}
           user={user}
           iconStyle='justify-left ml-8 mb-4'
           iconSize='w-20 h-20'
+          width={80}
+          height={70}
         />
         <h4 className='text-left text-slate-600'>{user.displayName}</h4>
         <h6 className='text-left text-slate-400'>{user.email}</h6>

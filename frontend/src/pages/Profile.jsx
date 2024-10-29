@@ -12,9 +12,8 @@ import { updateUserDetails } from '../store/authSlice';
 const Profile = () => {
   const [isModalVisible, setModalVisible] = useState(false);
   const [profileImg, setProfileImg] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
   const dispatch = useDispatch();
-  const { user } = useSelector((store) => store.auth);
+  const { user, profileImgUrl, error } = useSelector((state) => state.auth);
   useEffect(() => {
     async function fetchProfileImage() {
       if (user && user.photoURL && !profileImg) {
@@ -32,7 +31,7 @@ const Profile = () => {
 
   const updateUser = async (updatedUser) => {
     try {
-      await dispatch(updateUserDetails(updatedUser)); // Dispatch the action to update user details
+      await dispatch(updateUserDetails(updatedUser));
       console.log('User updated successfully');
     } catch (error) {
       console.error('Error updating user:', error);
@@ -62,6 +61,8 @@ const Profile = () => {
             user={user}
             iconStyle='-mt-44 justify-center'
             iconSize='w-40 h-40'
+            width={155}
+            height={140}
           />
 
           <div className='card-body text-center items-center'>
