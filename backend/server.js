@@ -7,7 +7,11 @@ const userRoute = require("./routes/userRoute");
 const app = express();
 const port = process.env.PORT || 3001;
 
-app.use(cors({ origin: process.env.CLIENT_URL || "http://localhost:5173" }));
+app.use(cors({ 
+  origin: process.env.CLIENT_URL || "http://localhost:5173",
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+ }));
 app.use(express.json());
 
 //Routes
