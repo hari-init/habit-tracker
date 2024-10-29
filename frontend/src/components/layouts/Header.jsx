@@ -8,16 +8,24 @@ import { useNavigate } from 'react-router-dom';
 
 const Header = () => {
   const [profileImg, setProfileImg] = useState();
+  const [imgError, setImgError] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user } = useSelector((store) => store.auth);
   useEffect(() => {
     async function fetchData() {
-      const response = await dispatch(fetchImage(user && user.photoURL));
-      setProfileImg(response.payload);
+      if (user && user.photoURL && !imgError) {
+        try {
+          const response = await dispatch(fetchImage(user.photoURL));
+          setProfileImg(response.payload);
+        } catch (error) {
+          console.error('Error fetching profile image:', error);
+          setImgError(true);
+        }
+      }
     }
     fetchData();
-  }, [user]);
+  }, [user, imgError, dispatch]);
 
   return (
     <>
@@ -44,8 +52,12 @@ const Header = () => {
               content={
                 <div className='w-10 avatar'>
                   <div className='rounded-full'>
-                    {user ? (
-                      <img src={profileImg} alt='ht logo' />
+                    {user && profileImg && !imgError ? (
+                      <img
+                        src={profileImg}
+                        alt='User profile'
+                        onError={() => setImgError(true)}
+                      />
                     ) : (
                       <Icon
                         icon='solar:user-bold-duotone'

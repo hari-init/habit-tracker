@@ -1,6 +1,9 @@
+import { useState } from 'react';
 import { Icon } from '@iconify/react/dist/iconify.js';
 
 const ProfileIcon = ({ photo, user, iconStyle, iconSize, width, height }) => {
+  const [imgError, setImgError] = useState(false);
+
   return (
     <div className={`${iconStyle} flex`}>
       <div className='avatar'>
@@ -8,8 +11,12 @@ const ProfileIcon = ({ photo, user, iconStyle, iconSize, width, height }) => {
           className={`${iconSize} rounded-full ring ring-primary ring-offset-base-100 ring-offset-2 shadow-md`}
         >
           <div>
-            {user && photo ? (
-              <img src={photo} alt='Profile logo' />
+            {user && photo && !imgError ? (
+              <img
+                src={photo}
+                alt='Profile logo'
+                onError={() => setImgError(true)}
+              />
             ) : (
               <Icon
                 icon='solar:user-bold-duotone'
@@ -24,4 +31,5 @@ const ProfileIcon = ({ photo, user, iconStyle, iconSize, width, height }) => {
     </div>
   );
 };
+
 export default ProfileIcon;
