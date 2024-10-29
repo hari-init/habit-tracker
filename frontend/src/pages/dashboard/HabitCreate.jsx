@@ -1,5 +1,6 @@
 import { format, addDays, eachDayOfInterval } from 'date-fns';
-import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useState, useEffect } from 'react';
 
 //Components
 import Button from '../../components/Button';
@@ -7,10 +8,13 @@ import TextInput from '../../components/TextInput';
 import Card from '../../components/Card';
 import CheckboxInput from '../../components/Checkbox';
 import SelectInput from '../../components/SelectInput';
+import { setHabits, updateHabitToUser } from '../../store/habitSlice';
 import { useNavigate } from 'react-router-dom';
 
 const HabitCreate = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.auth);
 
   //State
   const [hasError, setHasError] = useState(false);
@@ -37,6 +41,15 @@ const HabitCreate = () => {
       Sunday: true,
     },
   });
+
+  useEffect(() => {
+    if (habitList.length > 0) {
+      dispatch(setHabits(habitList));
+      dispatch(updateHabitToUser(user.email));
+      navigate('/dashboard');
+    }
+  }, [habitList, dispatch, navigate]);
+
   const createHabit = () => {
     const currentHabit = { ...formData, ...habit };
     const startDate = format(new Date(), 'yyyy/MM/dd');
@@ -172,7 +185,15 @@ const HabitCreate = () => {
                       return (
                         <CheckboxInput
                           key={index}
-                          labelText={day}
+                          labelText={
+                            (day === 'Monday' && 'M') ||
+                            (day === 'Tuesday' && 'T') ||
+                            (day === 'Wednesday' && 'W') ||
+                            (day === 'Thursday' && 'T') ||
+                            (day === 'Friday' && 'F') ||
+                            (day === 'Saturday' && 'S') ||
+                            (day === 'Sunday' && 'S')
+                          }
                           checked={formData.habitDays[day]}
                           value={day}
                           onChange={() =>
