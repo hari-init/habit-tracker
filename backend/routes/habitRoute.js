@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const { createHabit } = require("../controllers/habitController");
+const { createHabit, getHabits } = require("../controllers/habitController");
 
 router.post("/createHabit", createHabit);
-// router.post("/deleteHabit");
+router.get("/getHabits/:email", getHabits);
 // router.post("/updateHabit");
 module.exports = router;
