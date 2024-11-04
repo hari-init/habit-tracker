@@ -9,7 +9,7 @@ exports.createHabit = async (req, res) => {
     const doc = await habitRef.get();
     if (doc.exists) {
       let data = doc.data();
-      let mergeData = { ...data, habits: [...habitData] };
+      let mergeData = { ...data, habits: [...data.habits, ...habitData] };
       habitRef.set(mergeData);
     }
     res.status(201).send({ id: habitRef.id });

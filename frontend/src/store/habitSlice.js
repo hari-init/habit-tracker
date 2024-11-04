@@ -13,7 +13,7 @@ const habitSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(updateHabitToUser.fulfilled, (state, action) => {
-      state.habits = action.payload;
+      state.habits = state.habits;
     });
   },
 });
@@ -34,6 +34,7 @@ export const updateHabitToUser = createAsyncThunk(
         }
       );
       console.log('habits updated:', response.data.message);
+      return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
     }
