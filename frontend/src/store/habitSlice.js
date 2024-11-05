@@ -14,7 +14,7 @@ const habitSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(updateHabitToUser.fulfilled, (state, action) => {
-        state.habits = action.payload.habits;
+        state.habits = [];
       })
       .addCase(getHabits.fulfilled, (state, action) => {
         state.habits = action.payload;
@@ -26,7 +26,7 @@ export const updateHabitToUser = createAsyncThunk(
   'updateHabitToUser',
   async (id, thunkAPI) => {
     const state = thunkAPI.getState();
-    const habits = state.habits.habits;
+    const habits = [state.habits.habits[state.habits.habits.length - 1]];
     try {
       const response = await axios.post(
         `http://localhost:3001/createHabit/`,
