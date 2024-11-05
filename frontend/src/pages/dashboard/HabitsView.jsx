@@ -17,13 +17,16 @@ const HabitsView = ({}) => {
   ];
   useEffect(() => {
     user && dispatch(getHabits(user.email));
-  }, [user]);
+  }, []);
   return (
     <>
       <section className='flex m-3 gap-2 flex-wrap'>
         {/* {user} hi */}
         {habits.map((habit, index) => (
-          <Card cardStyle='w-96 shadow-xl bg-base-100 items-center px-5 py-5 flex max-h-[250px]'>
+          <Card
+            key={habit.habitName}
+            cardStyle='w-96 shadow-xl bg-base-100 items-center px-5 py-5 flex max-h-[250px]'
+          >
             <div className='flex items-center justify-between w-full'>
               <div className='flex items-center'>
                 <span className='cursor-pointer'>
