@@ -8,7 +8,11 @@ const habitSlice = createSlice({
   },
   reducers: {
     setHabits: (state, action) => {
-      state.habits = [...state.habits, ...action.payload];
+      const newHabits = action.payload.map((habit) => ({
+        ...habit,
+        points: habit.points || 0,
+      }));
+      state.habits = [...state.habits, ...newHabits];
     },
   },
   extraReducers: (builder) => {
@@ -17,7 +21,22 @@ const habitSlice = createSlice({
         state.habits = [];
       })
       .addCase(getHabits.fulfilled, (state, action) => {
-        state.habits = action.payload;
+        // When habits are fetched, ensure the points are initialized if not set
+        state.habits = action.payload.map((habit) => ({
+          ...habit,
+          points: habit.points || 0,
+        }));
+      })
+      .addCase(updateHabit.fulfilled, (state, action) => {
+        const { habitIndex, rewardPoints } = action.payload;
+        if (state.habits[habitIndex]) {
+          // Map through the habits array and update points for the specified habit
+          state.habits = state.habits.map((habit, index) =>
+            index === habitIndex
+              ? { ...habit, points: (habit.points || 0) + rewardPoints }
+              : habit
+          );
+        }
       });
   },
 });
@@ -54,6 +73,23 @@ export const getHabits = createAsyncThunk('getHabits', async (id, thunkAPI) => {
     return thunkAPI.rejectWithValue(error.message); // Handle the error
   }
 });
+
+// Add reward points
+export const updateHabit = createAsyncThunk(
+  'habits/updateHabit',
+  async ({ email, habitIndex, rewardPoints }, thunkAPI) => {
+    try {
+      const response = await axios.put(`http://localhost:3001/updateHabit`, {
+        userID: email,
+        habitIndex,
+        rewardPoints,
+      });
+      return { habitIndex, rewardPoints }; 
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
 
 export const { setHabits } = habitSlice.actions;
 export default habitSlice.reducer;

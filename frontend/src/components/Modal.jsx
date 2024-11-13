@@ -1,4 +1,4 @@
-import { useState,useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import ProfileIcon from './profile/ProfileIcon';
 import TextBox from './textBox/TextBox';
 import Button from './Button';
@@ -6,8 +6,8 @@ import { fetchImage } from '../store/authSlice';
 import { useDispatch } from 'react-redux';
 
 const Modal = ({ onClose, user, updateUser }) => {
-const dispatch = useDispatch();
-const [profileImg, setProfileImg] = useState(null);
+  const dispatch = useDispatch();
+  const [profileImg, setProfileImg] = useState(null);
   // State to hold the updated values
   const [updatedUser, setUpdatedUser] = useState({
     displayName: user.displayName,
@@ -62,22 +62,22 @@ const [profileImg, setProfileImg] = useState(null);
           onChange={(e) => handleChange('displayName', e.target.value)} // Update state on change
         />
         <TextBox
-          userData={updatedUser.email} // Email value
+          userData={updatedUser.email}
           label='Email'
           icon='mdi:email'
-          readOnly={true} // Email field is read-only
+          readOnly={true}
         />
         <TextBox
-          userData={updatedUser.age} // Age value
+          userData={updatedUser.age}
           label='Age'
           icon='mdi:face'
-          onChange={(e) => handleChange('age', e.target.value)} // Update state on change
+          onChange={(e) => handleChange('age', e.target.value)}
         />
         <TextBox
-          userData={updatedUser.gender} // Gender value
+          userData={updatedUser.gender}
           label='Gender'
           icon='mdi:gender-male-female'
-          onChange={(e) => handleChange('gender', e.target.value)} // Update state on change
+          onChange={(e) => handleChange('gender', e.target.value)}
         />
         <div className='modal-action'>
           <Button classProp='btn' content='Update' click={handleUpdate} />
