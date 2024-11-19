@@ -85,6 +85,9 @@ const HabitsView = () => {
     { date: '2016/04/12', count: 15 },
     { date: '2016/05/01', count: 25 },
   ];
+  useEffect(() => {
+    user && dispatch(getHabits(user.email));
+  }, [user]);
   return (
     <>
       <section className='flex m-3 gap-2 flex-wrap'>

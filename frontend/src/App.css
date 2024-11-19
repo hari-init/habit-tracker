@@ -38,3 +38,12 @@ body {
 * {
   box-sizing: border-box;
 }
+
+
+.gu-mirror {
+  list-style:none
+}
+
+.gu-transit {
+  opacity: 0 !important;
+}
