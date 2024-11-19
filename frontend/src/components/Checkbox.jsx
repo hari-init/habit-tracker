@@ -1,4 +1,7 @@
-function CheckboxInput({ checkboxStyle, labelText, checked, onChange, value }) {
+function CheckboxInput({ checkboxStyle, labelText, checked, onCheck, value }) {
+  const onChange = (event) => {
+    onCheck(event.target.checked);
+  };
   return (
     <div className={`${checkboxStyle}  form-control`}>
       <label className='label cursor-pointer'>
