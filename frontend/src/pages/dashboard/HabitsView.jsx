@@ -17,7 +17,7 @@ const HabitsView = ({}) => {
   ];
   useEffect(() => {
     user && dispatch(getHabits(user.email));
-  }, []);
+  }, [user]);
   return (
     <>
       <section className='flex m-3 gap-2 flex-wrap'>
