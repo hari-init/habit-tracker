@@ -42,7 +42,7 @@ export const isAuthenticated = createAsyncThunk(
 const checkAuthBackEnd = async (idToken) => {
   await axios
     .post(
-      'http://localhost:3001/authCheck',
+      'https://habit-tracker-qiso.onrender.com/authCheck',
       {},
       {
         headers: {
@@ -65,7 +65,7 @@ export const updateUserDetails = createAsyncThunk(
   async (updatedUser, thunkAPI) => {
     try {
       const response = await axios.put(
-        `http://localhost:3001/updateUser/${updatedUser.email}`,
+        `https://habit-tracker-qiso.onrender.com/updateUser/${updatedUser.email}`,
         { user: updatedUser },
         {
           headers: {
@@ -88,7 +88,7 @@ export const updateUserDetails = createAsyncThunk(
 const createUser = async (idToken, user) => {
   await axios
     .post(
-      'http://localhost:3001/createUser',
+      'https://habit-tracker-qiso.onrender.com/createUser',
       { user },
       {
         headers: {
@@ -111,7 +111,9 @@ export const fetchUser = createAsyncThunk(
   'fetchUser',
   async (email, thunkAPI) => {
     try {
-      const response = await axios.get(`http://localhost:3001/user/${email}`);
+      const response = await axios.get(
+        `https://habit-tracker-qiso.onrender.com/user/${email}`
+      );
 
       return response.data.user;
     } catch (error) {

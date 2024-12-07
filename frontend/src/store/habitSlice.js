@@ -48,7 +48,7 @@ export const updateHabitToUser = createAsyncThunk(
     const habits = [state.habits.habits[state.habits.habits.length - 1]];
     try {
       const response = await axios.post(
-        `http://localhost:3001/createHabit/`,
+        `https://habit-tracker-qiso.onrender.com/createHabit/`,
         { habits: habits, id },
         {
           headers: {
@@ -65,7 +65,9 @@ export const updateHabitToUser = createAsyncThunk(
 );
 export const getHabits = createAsyncThunk('getHabits', async (id, thunkAPI) => {
   try {
-    const response = await axios.get(`http://localhost:3001/getHabits/${id}`);
+    const response = await axios.get(
+      `https://habit-tracker-qiso.onrender.com/getHabits/${id}`
+    );
 
     return response.data.habits;
   } catch (error) {
