@@ -10,7 +10,10 @@ const port = process.env.PORT || 3001;
 
 app.use(
   cors({
-    origin: process.env.CLIENT_URL || "http://localhost:5173",
+    origin:
+      process.env.CLIENT_URL ||
+      "https://habit-tracker-1-3rpy.onrender.com" ||
+      "http://localhost:5173",
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
