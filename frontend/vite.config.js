@@ -7,9 +7,4 @@ export default defineConfig({
   define: {
     global: 'window',
   },
-  build: {
-    rollupOptions: {
-      external: ['@uiw/react-heat-map'],
-    },
-  },
 });
