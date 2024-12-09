@@ -81,12 +81,15 @@ export const updateHabit = createAsyncThunk(
   'habits/updateHabit',
   async ({ email, habitIndex, rewardPoints }, thunkAPI) => {
     try {
-      const response = await axios.put(`http://localhost:3001/updateHabit`, {
-        userID: email,
-        habitIndex,
-        rewardPoints,
-      });
-      return { habitIndex, rewardPoints }; 
+      const response = await axios.put(
+        `https://habit-tracker-qiso.onrender.com/updateHabit`,
+        {
+          userID: email,
+          habitIndex,
+          rewardPoints,
+        }
+      );
+      return { habitIndex, rewardPoints };
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
     }
