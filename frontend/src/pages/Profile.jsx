@@ -7,12 +7,20 @@ import Button from '../components/Button';
 import ProfileDetails from '../components/profile/ProfileDetails';
 import Modal from '../components/Modal';
 import { updateUserDetails } from '../store/authSlice';
+import { getHabits } from '../store/habitSlice';
 
 const Profile = () => {
   const [isModalVisible, setModalVisible] = useState(false);
   const [profileImg, setProfileImg] = useState(null);
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
+  const { habits } = useSelector((state) => state.habits);
+  console.log(user)
+  useEffect(() => {
+    if (user) {
+      dispatch(getHabits(user.email));
+    }
+  }, [user, dispatch]);
   useEffect(() => {
     async function fetchProfileImage() {
       if (user && user.photoURL && !profileImg) {
@@ -36,7 +44,7 @@ const Profile = () => {
       console.error('Error updating user:', error);
     }
   };
-
+ 
   //open Modal
   function openModal() {
     setModalVisible((prevIsModalVisible) => !prevIsModalVisible);
@@ -73,9 +81,9 @@ const Profile = () => {
             <p className='text-gray-600'>{user?.gender}</p>
 
             <div className='mt-4 grid grid-cols-3 gap-4 text-center'>
-              <ProfileDetails count='3' name='Habits' />
-              <ProfileDetails count='1' name='Rewards' />
-              <ProfileDetails count='23' name='Streaks' />
+              <ProfileDetails count={habits ? habits.length : 0} name='Habits' />
+              <ProfileDetails count={user ? user.points : 0} name='Points' />
+              <ProfileDetails count='2' name='Streaks' />
             </div>
           </div>
         </div>

@@ -28,8 +28,8 @@ export const isAuthenticated = createAsyncThunk(
         const userData = await thunkAPI
           .dispatch(fetchUser(user.email))
           .unwrap();
-        const { age, gender } = userData;
-        return { ...user, age, gender };
+        const { age, gender, points } = userData;
+        return { ...user, age, gender, points };
       }
       return user;
     } catch (error) {
@@ -74,9 +74,26 @@ export const updateUserDetails = createAsyncThunk(
         }
       );
       console.log('User updated:', response.data.message);
-      const { uid, email, displayName, photoURL, idToken, age, gender } =
-        response.data.user; // Assuming the backend returns updated user data with age and gender
-      return { uid, email, displayName, photoURL, idToken, age, gender };
+      const {
+        uid,
+        email,
+        displayName,
+        photoURL,
+        idToken,
+        age,
+        gender,
+        points,
+      } = response.data.user; // Assuming the backend returns updated user data with age and gender
+      return {
+        uid,
+        email,
+        displayName,
+        photoURL,
+        idToken,
+        age,
+        gender,
+        points,
+      };
     } catch (error) {
       console.error('Error updating user:', error);
       return thunkAPI.rejectWithValue(error.message);
@@ -138,9 +155,18 @@ export const googleSignIn = createAsyncThunk(
       await createUser(idToken, { uid, email, displayName, photoURL, habits });
       const userData = await thunkAPI.dispatch(fetchUser(email)).unwrap();
       console.log(userData);
-      const { age, gender } = userData;
+      const { age, gender, points } = userData;
 
-      return { uid, email, displayName, photoURL, idToken, age, gender };
+      return {
+        uid,
+        email,
+        displayName,
+        photoURL,
+        idToken,
+        age,
+        gender,
+        points,
+      };
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
     }

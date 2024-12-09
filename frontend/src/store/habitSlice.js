@@ -5,6 +5,7 @@ const habitSlice = createSlice({
   name: 'habits',
   initialState: {
     habits: ['test'],
+    points: 0,
   },
   reducers: {
     setHabits: (state, action) => {
@@ -37,6 +38,9 @@ const habitSlice = createSlice({
               : habit
           );
         }
+      })
+      .addCase(updateHabitPoints.fulfilled, (state, action) => {
+        state.points = action.payload.points;
       });
   },
 });
@@ -90,6 +94,31 @@ export const updateHabit = createAsyncThunk(
         }
       );
       return { habitIndex, rewardPoints };
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
+export const updateHabitPoints = createAsyncThunk(
+  'habits/updateHabitPoints',
+  async ({ email, points }, thunkAPI) => {
+    const state = thunkAPI.getState();
+    const currentPoints = state.habits.points;
+
+    // Prevent negative points
+    if (currentPoints + points < 0) {
+      return thunkAPI.rejectWithValue('Insufficient points');
+    }
+
+    try {
+      const response = await axios.put(
+        `https://habit-tracker-qiso.onrender.com/updateHabitPoints`,
+        {
+          userID: email,
+          points,
+        }
+      );
+      return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
     }
