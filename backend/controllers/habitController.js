@@ -34,7 +34,7 @@ exports.getHabits = async (req, res) => {
 
 exports.updateHabit = async (req, res) => {
   try {
-    const { userID, habitIndex, rewardPoints = 5 } = req.body; 
+    const { userID, habitIndex, rewardPoints = 5 } = req.body;
     const userRef = db.collection("users").doc(userID);
     const doc = await userRef.get();
 
@@ -43,48 +43,56 @@ exports.updateHabit = async (req, res) => {
       const habits = userData.habits || [];
       if (habitIndex >= 0 && habitIndex < habits.length) {
         const currentHabit = habits[habitIndex];
+        // Ensure `checkIns` is initialized as an array
         if (!Array.isArray(currentHabit.checkIns)) {
           currentHabit.checkIns = [];
         }
         const today = new Date();
-        currentHabit.checkIns.push({
-          date: today.toISOString(),
-          value: true,
-        });
+        const todayISO = today.toISOString();
+        // Check-in logic
+        currentHabit.checkIns.push({ date: todayISO, value: true });
         currentHabit.checkIns.sort(
-          (a, b) => new Date(a.date) - new Date(b.date)
+          (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
         );
-        let streak = 1; 
+        // Calculate streak
+        let streak = 1; // Start with the most recent check-in
         for (let i = currentHabit.checkIns.length - 1; i > 0; i--) {
           const currentDate = new Date(currentHabit.checkIns[i].date);
           const previousDate = new Date(currentHabit.checkIns[i - 1].date);
 
-          // Calculate the difference in days between consecutive check-ins
-          const diffInTime = currentDate - previousDate;
-          const diffInDays = diffInTime / (1000 * 60 * 60 * 24);
+          // Difference in days between consecutive check-ins
+          const diffInDays =
+            (currentDate - previousDate) / (1000 * 60 * 60 * 24);
 
-          // Check if the current check-in is exactly one day after the previous
           if (diffInDays === 1 && currentHabit.checkIns[i - 1].value) {
             streak++;
           } else {
-            break; 
+            break; // Streak is interrupted
           }
         }
-        // Update streak and mark habit as completed for today
+        const habitStartDate = new Date(currentHabit.checkIns[0].date);
+        const totalDays = Math.max(
+          Math.ceil((today - habitStartDate) / (1000 * 60 * 60 * 24)),
+          1 // Ensure at least 1 day is counted
+        );
+        const totalCheckIns = currentHabit.checkIns.filter(
+          (checkIn) => checkIn.value
+        ).length;
+        const consistency = Math.round((totalCheckIns / totalDays) * 100);
         currentHabit.streak = streak;
-        currentHabit.isCompleted = true;
+        currentHabit.consistency = consistency;
 
         // Update user's reward points
         const updatedPoints = (userData.points || 0) + rewardPoints;
 
-        // Save the updated habits and points back to Firestore
+        // Save updated habits and points to Firestore
         await userRef.update({
           habits,
           points: updatedPoints,
         });
 
         res.status(200).send({
-          message: "Habit check-in updated successfully",
+          message: "Habit updated successfully",
           habits,
           points: updatedPoints,
         });
@@ -95,6 +103,27 @@ exports.updateHabit = async (req, res) => {
       res.status(404).send({ message: "User not found" });
     }
   } catch (error) {
-    res.status(500).send(error.message);
+    res.status(500).send({ error: error.message });
+  }
+};
+exports.updateHabitPoints = async (req, res) => {
+  try {
+    const { userID, points } = req.body;
+    const userRef = db.collection("users").doc(userID);
+    const doc = await userRef.get();
+
+    if (doc.exists) {
+      const userData = doc.data();
+      const currentPoints = userData.points || 0;
+      const updatedPoints = Math.max(currentPoints - points, 0); // Subtract points for reduction
+
+      await userRef.update({ points: updatedPoints });
+
+      res.status(200).send({ points: updatedPoints });
+    } else {
+      res.status(404).send({ message: "User not found" });
+    }
+  } catch (error) {
+    res.status(500).send({ error: error.message });
   }
 };

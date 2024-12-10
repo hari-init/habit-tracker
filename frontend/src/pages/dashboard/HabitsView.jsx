@@ -16,7 +16,7 @@ const HabitsView = () => {
   const [checkedStates, setCheckedStates] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
   const [selectedHabitIndex, setSelectedHabitIndex] = useState(null);
-
+  
   useEffect(() => {
     if (user) {
       dispatch(getHabits(user.email));
@@ -120,7 +120,7 @@ const HabitsView = () => {
                   <p className='text-xs'>Streak</p>
                 </div>
                 <div>
-                  <p className='text-lg font-bold'>60%</p>
+                  <p className='text-lg font-bold'>{habit.consistency}%</p>
                   <p className='text-xs'>Consistency</p>
                 </div>
                 <div>
